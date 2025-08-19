@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolución de los Lenguajes de Programación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #6e8efb;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+        }
+        
+        .era {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            background-color: inherit;
+        }
+        
+        .era::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: white;
+            border: 4px solid #6e8efb;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+        
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+        
+        .right::after {
+            left: -13px;
+        }
+        
+        .era-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .era-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .era-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #6e8efb;
+        }
+        
+        .era-year {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #a777e3;
+            margin-bottom: 15px;
+        }
+        
+        .languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .language {
+            background: linear-gradient(135deg, #a777e3, #6e8efb);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .language:hover {
+            transform: scale(1.05);
+        }
+        
+        .era-description {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .language-detail {
+            margin-top: 20px;
+        }
+        
+        .language-detail h3 {
+            color: #6e8efb;
+            margin-bottom: 15px;
+        }
+        
+        .language-detail p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .language-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-item {
+            background-color: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .info-item span {
+            font-weight: bold;
+            color: #6e8efb;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .era {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .era::before {
+                left: 60px;
+                border: medium solid white;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Evolución de los Lenguajes de Programación</h1>
+        <p>Un viaje a través del tiempo mostrando los hitos más importantes en el desarrollo de los lenguajes de programación</p>
+    </header>
+    
+    <div class="intro">
+        <p>Desde los primeros lenguajes de máquina hasta los modernos lenguajes de alto nivel, la programación ha evolucionado drásticamente. Explora esta línea de tiempo para descubrir los hitos más importantes en la historia de los lenguajes de programación.</p>
+    </div>
+    
+    <div class="timeline">
+        <!-- Década de 1940 -->
+        <div class="era left">
+            <div class="era-content">
+                <h2 class="era-title">Los Inicios</h2>
+                <div class="era-year">Década de 1940</div>
+                <p class="era-description">Los primeros lenguajes de programación surgieron poco después de las primeras computadoras electrónicas. Eran extremadamente básicos y cercanos al hardware.</p>
+                <div class="languages">
+                    <div class="language" data-lang="plankalkul">Plankalkül (1943-1945)</div>
+                    <div class="language" data-lang="assembly">Lenguaje Ensamblador (1947)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 1950 -->
+        <div class="era right">
+            <div class="era-content">
+                <h2 class="era-title">Primeros Lenguajes de Alto Nivel</h2>
+                <div class="era-year">Década de 1950</div>
+                <p class="era-description">Aparecen los primeros lenguajes de programación modernos, sentando las bases para la programación tal como la conocemos hoy.</p>
+                <div class="languages">
+                    <div class="language" data-lang="fortran">Fortran (1957)</div>
+                    <div class="language" data-lang="lisp">LISP (1958)</div>
+                    <div class="language" data-lang="cobol">COBOL (1959)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 1960 -->
+        <div class="era left">
+            <div class="era-content">
+                <h2 class="era-title">Estructuración y Expansión</h2>
+                <div class="era-year">Década de 1960</div>
+                <p class="era-description">Se desarrollan conceptos fundamentales como la programación estructurada y aparecen lenguajes que influirían enormemente en el futuro.</p>
+                <div class="languages">
+                    <div class="language" data-lang="algol">ALGOL (1960)</div>
+                    <div class="language" data-lang="basic">BASIC (1964)</div>
+                    <div class="language" data-lang="simula">Simula (1967)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 1970 -->
+        <div class="era right">
+            <div class="era-content">
+                <h2 class="era-title">Revolución Estructural</h2>
+                <div class="era-year">Década de 1970</div>
+                <p class="era-description">Surgen lenguajes que enfatizan la programación estructurada y se sientan las bases para los paradigmas modernos.</p>
+                <div class="languages">
+                    <div class="language" data-lang="pascal">Pascal (1970)</div>
+                    <div class="language" data-lang="c">C (1972)</div>
+                    <div class="language" data-lang="sql">SQL (1978)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 1980 -->
+        <div class="era left">
+            <div class="era-content">
+                <h2 class="era-title">Expansión de Paradigmas</h2>
+                <div class="era-year">Década de 1980</div>
+                <p class="era-description">Se popularizan diferentes paradigmas de programación, especialmente la programación orientada a objetos.</p>
+                <div class="languages">
+                    <div class="language" data-lang="cplusplus">C++ (1983)</div>
+                    <div class="language" data-lang="objective-c">Objective-C (1984)</div>
+                    <div class="language" data-lang="perl">Perl (1987)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 1990 -->
+        <div class="era right">
+            <div class="era-content">
+                <h2 class="era-title">La Era de Internet</h2>
+                <div class="era-year">Década de 1990</div>
+                <p class="era-description">El auge de Internet impulsa el desarrollo de lenguajes para la web y se popularizan los lenguajes de scripting.</p>
+                <div class="languages">
+                    <div class="language" data-lang="python">Python (1991)</div>
+                    <div class="language" data-lang="ruby">Ruby (1993)</div>
+                    <div class="language" data-lang="java">Java (1995)</div>
+                    <div class="language" data-lang="javascript">JavaScript (1995)</div>
+                    <div class="language" data-lang="php">PHP (1995)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 2000 -->
+        <div class="era left">
+            <div class="era-content">
+                <h2 class="era-title">Modernización y Productividad</h2>
+                <div class="era-year">Década de 2000</div>
+                <p class="era-description">Surgen lenguajes que priorizan la productividad del desarrollador, la seguridad y la programación funcional.</p>
+                <div class="languages">
+                    <div class="language" data-lang="csharp">C# (2000)</div>
+                    <div class="language" data-lang="scala">Scala (2003)</div>
+                    <div class="language" data-lang="go">Go (2007)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Década de 2010 -->
+        <div class="era right">
+            <div class="era-content">
+                <h2 class="era-title">Especialización y Rendimiento</h2>
+                <div class="era-year">Década de 2010</div>
+                <p class="era-description">Nuevos lenguajes enfocados en seguridad, concurrencia y aplicaciones específicas como sistemas distribuidos.</p>
+                <div class="languages">
+                    <div class="language" data-lang="rust">Rust (2010)</div>
+                    <div class="language" data-lang="dart">Dart (2011)</div>
+                    <div class="language" data-lang="kotlin">Kotlin (2011)</div>
+                    <div class="language" data-lang="swift">Swift (2014)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="language-detail" class="language-detail">
+                <!-- Los detalles del lenguaje se cargarán aquí mediante JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Línea de tiempo sobre la evolución de los lenguajes de programación</p>
+        <p>© 2023 - Diseñado con fines educativos</p>
+    </footer>
+
+    <script>
+        // Datos de los lenguajes de programación
+        const languagesData = {
+            "plankalkul": {
+                name: "Plankalkül",
+                year: "1943-1945",
+                creator: "Konrad Zuse",
+                description: "Considerado el primer lenguaje de programación de alto nivel. Fue diseñado para propósitos de ingeniería pero nunca se implementó durante la vida de Zuse.",
+                features: ["Primer lenguaje de alto nivel", "Diseñado para aplicaciones de ingeniería", "Incluía estructuras de datos y programación lógica"],
+                significance: "Sentó las bases conceptuales para los lenguajes de programación modernos."
+            },
+            "assembly": {
+                name: "Lenguaje Ensamblador",
+                year: "1947",
+                creator: "Varios",
+                description: "Lenguaje de bajo nivel que representa las instrucciones de máquina de forma simbólica. Cada arquitectura de computadora tiene su propio ensamblador.",
+                features: ["Correspondencia directa con código máquina", "Dependiente de la arquitectura", "Alto rendimiento"],
+                significance: "Permitió programar a un nivel más abstracto que el código máquina puro."
+            },
+            "fortran": {
+                name: "Fortran",
+                year: "1957",
+                creator: "John Backus (IBM)",
+                description: "Primer lenguaje de programación de alto nivel ampliamente utilizado. Diseñado para cálculos científicos y matemáticos.",
+                features: ["Optimizado para cálculo numérico", "Primer compilador", "Introdujo variables y bucles"],
+                significance: "Revolucionó la programación científica y demostró que los compiladores podían generar código eficiente."
+            },
+            "lisp": {
+                name: "LISP",
+                year: "1958",
+                creator: "John McCarthy",
+                description: "Segundo lenguaje de programación de alto nivel más antiguo. Diseñado para la investigación en inteligencia artificial.",
+                features: ["Programación funcional", "Notación de paréntesis", "Recolección de basura automática"],
+                significance: "Pionero en muchos conceptos de ciencias de la computación y sigue influyendo en lenguajes modernos."
+            },
+            "cobol": {
+                name: "COBOL",
+                year: "1959",
+                creator: "Comité CODASYL",
+                description: "Diseñado para aplicaciones empresariales. Su sintaxis se asemeja al inglés para facilitar su lectura.",
+                features: ["Orientado a negocios", "Sintaxis similar al inglés", "Manejo de archivos y registros"],
+                significance: "Dominó la programación empresarial durante décadas y todavía se usa en sistemas legacy."
+            },
+            "algol": {
+                name: "ALGOL",
+                year: "1960",
+                creator: "Comité internacional",
+                description: "Influenció profundamente el diseño de muchos lenguajes posteriores. Conocido por su sintaxis clara y estructura.",
+                features: ["Estructuras de bloque", "Ámbito léxico", "Precisión en la definición sintáctica"],
+                significance: "Base teórica para muchos lenguajes posteriores como Pascal, C y Java."
+            },
+            "basic": {
+                name: "BASIC",
+                year: "1964",
+                creator: "John Kemeny y Thomas Kurtz",
+                description: "Diseñado para facilitar la programación a no científicos. Muy popular en microcomputadoras de los 80.",
+                features: ["Fácil de aprender", "Interpretado", "Interactivo"],
+                significance: "Hizo la programación accesible para una audiencia masiva."
+            },
+            "simula": {
+                name: "Simula",
+                year: "1967",
+                creator: "Ole-Johan Dahl y Kristen Nygaard",
+                description: "Considerado el primer lenguaje de programación orientado a objetos. Diseñado para simulaciones.",
+                features: ["Clases y objetos", "Herencia", "Subtipos"],
+                significance: "Introdujo los conceptos fundamentales de la programación orientada a objetos."
+            },
+            "pascal": {
+                name: "Pascal",
+                year: "1970",
+                creator: "Niklaus Wirth",
+                description: "Diseñado para enseñar programación estructurada. Enfatiza la claridad y el orden.",
+                features: ["Tipado fuerte", "Estructuras de control claras", "Programación estructurada"],
+                significance: "Se convirtió en el lenguaje de enseñanza dominante durante los 80 y principios de los 90."
+            },
+            "c": {
+                name: "C",
+                year: "1972",
+                creator: "Dennis Ritchie (Bell Labs)",
+                description: "Desarrollado para reprogramar el sistema Unix. Combina elementos de alto y bajo nivel.",
+                features: ["Acceso a memoria de bajo nivel", "Lenguaje estructurado", "Portabilidad"],
+                significance: "Uno de los lenguajes más influyentes. Base para sistemas operativos y muchos lenguajes posteriores."
+            },
+            "sql": {
+                name: "SQL",
+                year: "1978",
+                creator: "Donald D. Chamberlin y Raymond F. Boyce",
+                description: "Lenguaje de consulta estructurado para gestionar bases de datos relacionales.",
+                features: ["Manejo de datos declarativo", "Consultas complejas", "Gestión de transacciones"],
+                significance: "Estándar universal para bases de datos relacionales."
+            },
+            "cplusplus": {
+                name: "C++",
+                year: "1983",
+                creator: "Bjarne Stroustrup",
+                description: "Extensión de C que añade programación orientada a objetos y otras características.",
+                features: ["Programación multiparadigma", "Alto rendimiento", "Compatibilidad con C"],
+                significance: "Llevó la programación orientada a objetos a aplicaciones de alto rendimiento."
+            },
+            "objective-c": {
+                name: "Objective-C",
+                year: "1984",
+                creator: "Brad Cox y Tom Love",
+                description: "Añade mensajes estilo Smalltalk a C. Fue el lenguaje principal para macOS e iOS hasta 2014.",
+                features: ["Orientado a objetos", "Mensajes dinámicos", "Compatibilidad con C"],
+                significance: "Dominó el desarrollo para Apple durante casi tres décadas."
+            },
+            "perl": {
+                name: "Perl",
+                year: "1987",
+                creator: "Larry Wall",
+                description: "Lenguaje de scripting conocido por su potencia en procesamiento de texto.",
+                features: ["Manejo avanzado de texto", "Expresiones regulares", "Flexibilidad extrema"],
+                significance: "Fue crucial en los primeros días de la web para CGI y procesamiento de textos."
+            },
+            "python": {
+                name: "Python",
+                year: "1991",
+                creator: "Guido van Rossum",
+                description: "Enfatiza la legibilidad del código y la productividad del programador.",
+                features: ["Sintaxis clara", "Multiparadigma", "Amplia biblioteca estándar"],
+                significance: "Se ha convertido en uno de los lenguajes más populares para múltiples dominios."
+            },
+            "ruby": {
+                name: "Ruby",
+                year: "1993",
+                creator: "Yukihiro Matsumoto",
+                description: "Diseñado para la productividad y diversión del programador. Sigue el principio de least surprise.",
+                features: ["Orientado a objetos puro", "Sintaxis elegante", "Bloques y iteradores"],
+                significance: "Ganó popularidad masiva con el framework Ruby on Rails."
+            },
+            "java": {
+                name: "Java",
+                year: "1995",
+                creator: "James Gosling (Sun Microsystems)",
+                description: "Diseñado para ser portable y seguro con la filosofía 'write once, run anywhere'.",
+                features: ["Orientado a objetos", "Máquina virtual", "Gestión automática de memoria"],
+                significance: "Dominó el desarrollo empresarial y Android durante más de una década."
+            },
+            "javascript": {
+                name: "JavaScript",
+                year: "1995",
+                creator: "Brendan Eich (Netscape)",
+                description: "Lenguaje de scripting para web que se ejecuta en el navegador. No relacionado con Java.",
+                features: ["Orientado a eventos", "Prototipado", "Funciones de primera clase"],
+                significance: "Lenguaje indispensable para desarrollo web frontend y ahora también backend con Node.js."
+            },
+            "php": {
+                name: "PHP",
+                year: "1995",
+                creator: "Rasmus Lerdorf",
+                description: "Diseñado originalmente para desarrollo web personal, luego evolucionó a lenguaje de propósito general.",
+                features: ["Orientado al web", "Embedded en HTML", "Amplia adopción en hosting"],
+                significance: "Impulsó una gran parte de la web inicial, incluyendo WordPress, Facebook y Wikipedia."
+            },
+            "csharp": {
+                name: "C#",
+                year: "2000",
+                creator: "Anders Hejlsberg (Microsoft)",
+                description: "Lenguaje multiparadigma desarrollado para la plataforma .NET con influencias de Java y C++.",
+                features: ["Tipado estático", "Orientado a objetos", "Componentes y propiedades"],
+                significance: "Lenguaje principal para desarrollo en ecosystema Microsoft."
+            },
+            "scala": {
+                name: "Scala",
+                year: "2003",
+                creator: "Martin Odersky",
+                description: "Combina programación funcional y orientada a objetos ejecutándose en la JVM.",
+                features: ["Funcional y orientado a objetos", "Tipado estático fuerte", "Inferencia de tipos"],
+                significance: "Demostró la viabilidad de lenguajes funcionales en entornos empresariales."
+            },
+            "go": {
+                name: "Go",
+                year: "2007",
+                creator: "Robert Griesemer, Rob Pike, Ken Thompson (Google)",
+                description: "Diseñado para ser simple, eficiente y con buen soporte para concurrencia.",
+                features: ["Sintaxis simple", "Concurrencia con goroutines", "Compilación rápida"],
+                significance: "Popular para servicios en la nube y herramientas de línea de comandos."
+            },
+            "rust": {
+                name: "Rust",
+                year: "2010",
+                creator: "Graydon Hoare (Mozilla)",
+                description: "Enfocado en seguridad, rendimiento y concurrencia sin recolector de basura.",
+                features: ["Seguridad de memoria sin GC", "Concurrencia segura", "Abstracciones de cero costo"],
+                significance: "Ofrece el control de bajo nivel de C/C++ con garantías de seguridad modernas."
+            },
+            "dart": {
+                name: "Dart",
+                year: "2011",
+                creator: "Google",
+                description: "Optimizado para aplicaciones UI, especialmente con el framework Flutter.",
+                features: ["Orientado a objetos", "Compilación a JavaScript o nativo", "Hot reload"],
+                significance: "Base para Flutter, permitiendo desarrollo multiplataforma eficiente."
+            },
+            "kotlin": {
+                name: "Kotlin",
+                year: "2011",
+                creator: "JetBrains",
+                description: "Lenguaje moderno que se ejecuta en JVM y se puede compilar a JavaScript o código nativo.",
+                features: ["Interoperable con Java", "Nulos seguros", "Extensiones de funciones"],
+                significance: "Lenguaje oficial preferido para desarrollo Android."
+            },
+            "swift": {
+                name: "Swift",
+                year: "2014",
+                creator: "Apple",
+                description: "Diseñado para reemplazar Objective-C en el ecosistema Apple con más seguridad y rendimiento.",
+                features: ["Seguro por diseño", "Rápido", "Sintaxis moderna"],
+                significance: "Lenguaje principal para desarrollo en iOS, macOS, watchOS y tvOS."
+            }
+        };
+
+        // Funcionalidad para mostrar detalles del lenguaje
+        document.querySelectorAll('.language').forEach(language => {
+            language.addEventListener('click', () => {
+                const langKey = language.getAttribute('data-lang');
+                const langData = languagesData[langKey];
+                
+                if (langData) {
+                    const modalContent = `
+                        <h3>${langData.name} (${langData.year})</h3>
+                        <p><strong>Creador:</strong> ${langData.creator}</p>
+                        <p>${langData.description}</p>
+                        
+                        <div class="language-info">
+                            <div class="info-item"><span>Características:</span> ${langData.features.join(', ')}</div>
+                        </div>
+                        
+                        <p><strong>Significancia histórica:</strong> ${langData.significance}</p>
+                    `;
+                    
+                    document.getElementById('language-detail').innerHTML = modalContent;
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            });
+        });
+
+        // Cerrar modal
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+        });
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.addEventListener('click', (event) => {
+            if (event.target === document.getElementById('modal')) {
+                document.getElementById('modal').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
